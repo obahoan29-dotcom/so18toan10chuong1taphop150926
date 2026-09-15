@@ -1146,7 +1146,7 @@
             return answeredCount;
         }
 
-        // ==================== ĐĂNG NHẬP (ĐỢI MÁY CHỦ URL1 PHẢN HỒI TRONG 15 GIÂY) ====================
+        // ==================== ĐĂNG NHẬP (ĐỢI MÁY CHỦ URL1 PHẢN HỒI TRONG 25 GIÂY) ====================
         async function startExamAction() {
             const sId = document.getElementById("student-id").value.trim();
             const sName = document.getElementById("student-name").value.trim();
@@ -1182,8 +1182,8 @@
             };
 
             try {
-                // Đợi phản hồi trực tiếp từ URL1 với Timeout TĂNG LÊN 15 GIÂY (15000ms)
-                await postToGoogleSheet(URL1_TAB_CHEATING, payload, 15000);
+                // Đợi phản hồi trực tiếp từ URL1 với Timeout TĂNG LÊN 25 GIÂY (25000ms)
+                await postToGoogleSheet(URL1_TAB_CHEATING, payload, 25000);
 
                 // Nhận phản hồi thành công từ URL1 mới cho vào làm bài
                 document.getElementById("nav-student-name").innerText = sName;
@@ -1260,7 +1260,7 @@
             }, 1000);
         }
 
-        // GỬI LOG CHUYỂN TAB (Sử dụng timeout 15000ms = 15 giây cho URL1)
+        // GỬI LOG CHUYỂN TAB (Sử dụng timeout 25000ms = 25 giây cho URL1)
         document.addEventListener("visibilitychange", function() {
             if (!examStartTime || isSubmitted) return;
 
@@ -1314,8 +1314,8 @@
                 timestamp: new Date().toLocaleString("vi-VN")
             };
 
-            // Tăng thời gian chờ phản hồi URL1 khi gửi log chuyển tab lên 15 giây
-            postToGoogleSheet(URL1_TAB_CHEATING, payload, 15000).catch(err => console.error("Lỗi gửi log chuyển tab:", err));
+            // Tăng thời gian chờ phản hồi URL1 khi gửi log chuyển tab lên 25 giây
+            postToGoogleSheet(URL1_TAB_CHEATING, payload, 25000).catch(err => console.error("Lỗi gửi log chuyển tab:", err));
         }
 
         function showSubmitConfirmModal() {
