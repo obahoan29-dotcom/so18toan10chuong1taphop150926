@@ -96,25 +96,26 @@
             overflow: hidden;
         }
         .user-avatar {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #0284c7;
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             flex-shrink: 0;
         }
         .user-info {
             display: flex;
             flex-direction: column;
-            line-height: 1.15;
+            line-height: 1.1;
             overflow: hidden;
         }
-        .user-name { font-weight: 800; font-size: 0.82rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
-        .user-sub { font-size: 0.7rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+        /* THU NHỎ TÊN THÍ SINH, SBD VÀ LỚP */
+        .user-name { font-weight: 800; font-size: 0.72rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+        .user-sub { font-size: 0.62rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
 
         .nav-right-tools {
             display: flex;
@@ -207,14 +208,14 @@
             width: 100%;
         }
         .q-nav-arrow {
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             border: 1.5px solid #f97316;
             background: #ffffff;
             color: #f97316;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -237,14 +238,15 @@
         }
         .q-nav-scroll::-webkit-scrollbar { display: none; }
 
+        /* THU NHỎ CÁC Ô TRÒN SỐ CÂU TRÊN TOP BANNER */
         .q-circle {
-            width: 28px;
-            height: 28px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: #ffffff;
             border: 1.5px solid #cbd5e1;
             color: #475569;
-            font-size: 0.78rem;
+            font-size: 0.65rem;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -484,7 +486,7 @@
                 </div>
 
                 <div class="nav-right-tools">
-                    <!-- KHUNG SỐ CÂU ĐÃ LÀM (THAY THẾ NÚT ! CŨ) -->
+                    <!-- KHUNG SỐ CÂU ĐÃ LÀM -->
                     <div class="progress-pill" id="nav-progress-box" title="Tiến độ làm bài" onclick="showSubmitConfirmModal()">
                         <span class="progress-icon">✅</span>
                         <span class="progress-val" id="nav-progress-val">0/0</span>
@@ -643,7 +645,7 @@
 
         let pendingSubmissionPayload = null;
 
-        // HAM GUI GOI MANG OPTIMIZED GUI POST DEN GOOGLE APPS SCRIPT (Mặc định timeout 10000ms = 10 giây)
+        // HÀM GỬI POST TỚI GOOGLE APPS SCRIPT (Mặc định timeout 10000ms = 10 giây)
         async function postToGoogleSheet(url, payload, timeoutMs = 10000) {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -1136,7 +1138,6 @@
                 }
             });
 
-            // Cập nhật giá trị hiển thị tiến độ (ví dụ 37/61) trên thanh công cụ
             const progressValEl = document.getElementById("nav-progress-val");
             if (progressValEl) {
                 progressValEl.innerText = `${answeredCount}/${totalQuestionsCount}`;
@@ -1145,7 +1146,7 @@
             return answeredCount;
         }
 
-        // ==================== ĐĂNG NHẬP (BẮT BUỘC ĐỜI MÁY CHỦ URL1 PHẢN HỒI TRONG 10 GIÂY) ====================
+        // ==================== ĐĂNG NHẬP (ĐỢI MÁY CHỦ URL1 PHẢN HỒI TRONG 15 GIÂY) ====================
         async function startExamAction() {
             const sId = document.getElementById("student-id").value.trim();
             const sName = document.getElementById("student-name").value.trim();
@@ -1181,8 +1182,8 @@
             };
 
             try {
-                // Đợi phản hồi trực tiếp từ URL1 (Timeout 10000ms = 10 giây)
-                await postToGoogleSheet(URL1_TAB_CHEATING, payload, 10000);
+                // Đợi phản hồi trực tiếp từ URL1 với Timeout TĂNG LÊN 15 GIÂY (15000ms)
+                await postToGoogleSheet(URL1_TAB_CHEATING, payload, 15000);
 
                 // Nhận phản hồi thành công từ URL1 mới cho vào làm bài
                 document.getElementById("nav-student-name").innerText = sName;
@@ -1259,7 +1260,7 @@
             }, 1000);
         }
 
-        // GỬI LOG CHUYỂN TAB (Sử dụng timeout 10000ms cho URL1)
+        // GỬI LOG CHUYỂN TAB (Sử dụng timeout 15000ms = 15 giây cho URL1)
         document.addEventListener("visibilitychange", function() {
             if (!examStartTime || isSubmitted) return;
 
@@ -1313,7 +1314,8 @@
                 timestamp: new Date().toLocaleString("vi-VN")
             };
 
-            postToGoogleSheet(URL1_TAB_CHEATING, payload, 10000).catch(err => console.error("Lỗi gửi log chuyển tab:", err));
+            // Tăng thời gian chờ phản hồi URL1 khi gửi log chuyển tab lên 15 giây
+            postToGoogleSheet(URL1_TAB_CHEATING, payload, 15000).catch(err => console.error("Lỗi gửi log chuyển tab:", err));
         }
 
         function showSubmitConfirmModal() {
@@ -1349,7 +1351,7 @@
             document.getElementById("submit-confirm-modal").style.display = "none";
         }
 
-        // ==================== NỘP BÀI THI & KIỂM TRA PHẢN HỒI URL2 (10 GIÂY CHỜ) ====================
+        // ==================== NỘP BÀI THI & KIỂM TRA PHẢN HỒI URL2 ====================
         async function executeSubmitExam() {
             if (isSubmitted || isSubmitting || hasSubmittedToUrl2) return;
             
@@ -1452,7 +1454,6 @@
 
             pendingSubmissionPayload = payload;
 
-            // Bộ đếm đếm ngược 10 giây hiển thị 1/10, 2/10...
             let elapsedSec = 0;
             let subTicker = setInterval(() => {
                 elapsedSec++;
@@ -1465,10 +1466,8 @@
             }, 1000);
 
             try {
-                // Đợi phản hồi trực tiếp từ URL2 (10000ms = 10 giây)
                 await postToGoogleSheet(URL2_EXAM_RESULT, payload, 10000);
 
-                // CHỈ KHI URL2 PHẢN HỒI THÀNH CÔNG MỚI CHO HIỆN ĐIỂM
                 clearInterval(subTicker);
                 hasSubmittedToUrl2 = true;
                 isSubmitted = true;
@@ -1483,13 +1482,11 @@
                 renderResultSummaryScreen(correctCount, wrongCount, spentMins, completionTimeStr, score10Scale);
 
             } catch (err) {
-                // Sự cố mất mạng hoặc URL2 phản hồi quá chậm
                 clearInterval(subTicker);
                 handleSubmissionTimeout(actionsBox, statusMsg);
             }
         }
 
-        // BẬT CHẾ ĐỘ XỬ LÝ QUÁ 10 GIÂY (LƯU THÔNG TIN TẠM & NỘP LẠI)
         function handleSubmissionTimeout(actionsBox, statusMsg) {
             isSubmitting = false;
 
