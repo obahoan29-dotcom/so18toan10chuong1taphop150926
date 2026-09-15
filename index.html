@@ -123,22 +123,36 @@
             flex-shrink: 0;
         }
 
-        .info-btn-circle {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 1.5px solid #64748b;
-            color: #475569;
-            font-size: 0.8rem;
-            font-weight: 800;
+        /* KHUNG HIỂN THỊ TIẾN ĐỘ SỐ CÂU LÀM ĐƯỢC NỔI BẬT */
+        .progress-pill {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+            border: 1px solid #047857;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.6);
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
-        .info-btn-circle:hover { background: #fff; color: #0f172a; }
+        .progress-pill:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45);
+        }
+        .progress-icon {
+            font-size: 0.85rem;
+            line-height: 1;
+        }
+        .progress-val {
+            font-size: 0.88rem;
+            font-weight: 800;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
 
         .v-divider { width: 1px; height: 16px; background: #cbd5e1; margin: 0 1px; }
 
@@ -470,7 +484,11 @@
                 </div>
 
                 <div class="nav-right-tools">
-                    <div class="info-btn-circle" title="Tiến độ bài làm" onclick="showSubmitConfirmModal()">!</div>
+                    <!-- KHUNG SỐ CÂU ĐÃ LÀM (THAY THẾ NÚT ! CŨ) -->
+                    <div class="progress-pill" id="nav-progress-box" title="Tiến độ làm bài" onclick="showSubmitConfirmModal()">
+                        <span class="progress-icon">✅</span>
+                        <span class="progress-val" id="nav-progress-val">0/0</span>
+                    </div>
                     <div class="v-divider"></div>
                     <div class="clock-pill" id="nav-timer-box">
                         <span class="clock-icon">⏰</span>
@@ -986,6 +1004,7 @@
             container.innerHTML = html;
             renderQuestionPalette(questions);
             setupScrollObserver();
+            updateProgress();
         }
 
         function renderQuestionPalette(questions) {
@@ -1116,6 +1135,12 @@
                     else if (status === "partial") navBtn.classList.add("partial");
                 }
             });
+
+            // Cập nhật giá trị hiển thị tiến độ (ví dụ 37/61) trên thanh công cụ
+            const progressValEl = document.getElementById("nav-progress-val");
+            if (progressValEl) {
+                progressValEl.innerText = `${answeredCount}/${totalQuestionsCount}`;
+            }
 
             return answeredCount;
         }
